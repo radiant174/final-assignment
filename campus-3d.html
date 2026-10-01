@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园三维导览 · 校园公共信息与数据展示中心</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="libs/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="scene-page">
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top" aria-label="主导航">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="index.html">校园公共信息中心</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="展开或收起导航">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">首页</a></li>
+          <li class="nav-item"><a class="nav-link" href="study-rooms.html">自习室</a></li>
+          <li class="nav-item"><a class="nav-link" href="statistics.html">数据统计</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="campus-3d.html">校园三维</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="scene-stage" id="scene-stage"></div>
+
+  <div class="scene-hud">
+    <h1 class="h6 mb-2">校园三维导览</h1>
+    <p class="mb-0">正在准备三维场景…</p>
+    <p id="scene-status" class="alert alert-danger mb-0" role="status" aria-live="polite" hidden></p>
+  </div>
+
+  <footer class="site-footer position-fixed bottom-0 start-0 end-0 mb-0">
+    <div class="container text-center small">《软件开发综合实践》期末大作业 · 数据来源：课程教学演示数据</div>
+  </footer>
+
+  <script src="libs/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+/* 校园公共信息与数据展示中心 —— 自定义样式
+   引入顺序：Bootstrap 之后引入本文件，才能覆盖框架默认样式。 */
+
+:root {
+  --brand: #0b5ed7;
+  --brand-dark: #0a4fb5;
+  --ink: #2b3445;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --paper: #f7f8fa;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+  line-height: 1.7;
+}
+
+/* 锚点跳转给吸顶导航留出空间 */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ---------- 导航 ---------- */
+.navbar-brand {
+  color: var(--brand);
+}
+
+.navbar .nav-link {
+  color: var(--ink);
+}
+
+.navbar .nav-link:hover {
+  color: var(--brand);
+}
+
+.navbar .nav-link.active {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+/* ---------- 通用块 ---------- */
+.card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(11, 94, 215, 0.16);
+}
+
+.card .card-title {
+  color: var(--brand-dark);
+}
+
+.hero {
+  background: linear-gradient(135deg, #14324f 0%, #1f6f8b 100%);
+  color: #fff;
+  border-radius: 14px;
+  padding: 32px 26px;
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 0;
+}
+
+.placeholder-note {
+  background-color: #fff;
+  border: 1px dashed var(--line);
+  border-left: 4px solid var(--brand);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: var(--muted);
+}
+
+.section-head h2 {
+  font-size: 1.35rem;
+  color: #14324f;
+  border-left: 4px solid var(--brand);
+  padding-left: 12px;
+}
+
+/* ---------- 图表容器：不给高度图表不显示 ---------- */
+.chart-box {
+  height: 360px;
+  background-color: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+/* ---------- 三维页 ---------- */
+body.scene-page {
+  overflow: hidden;
+}
+
+.scene-stage {
+  position: fixed;
+  inset: 0;
+  background: #aee3f7;
+}
+
+.scene-hud {
+  position: fixed;
+  top: 84px;
+  left: 16px;
+  max-width: min(340px, calc(100vw - 32px));
+  background: rgba(255, 255, 255, 0.93);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(20, 50, 79, 0.16);
+}
+
+.scene-hud p {
+  font-size: 0.86rem;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+  background-color: #fff;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  padding: 22px 0;
+  margin-top: 32px;
+  font-size: 0.9rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
