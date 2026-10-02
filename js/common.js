@@ -30,6 +30,16 @@ const Campus = {
     return Number(value).toLocaleString('zh-CN');
   },
 
+  /* HTML 转义：JSON 内容拼进模板字符串之前先转义，避免数据里的尖括号被当成页面结构 */
+  escapeHTML(value) {
+    return String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  },
+
   /* 取本周周一（用于预约表单的默认日期与最小可选日期） */
   mondayOfThisWeek() {
     const today = new Date();
