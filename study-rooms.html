@@ -31,24 +31,142 @@
 
   <main id="main" class="container py-4">
     <h1 class="h3 mb-1">自习室查询与预约</h1>
-    <p class="text-muted">按楼栋、楼层与开放状态筛选，搜索名称，并登记座位预约。</p>
+    <p class="text-muted">按楼栋、楼层、开放状态与插座筛选，输入关键字搜索，并登记座位预约。</p>
 
+    <!-- 数据加载的三种状态都显示在这里 -->
     <p id="room-status" class="alert alert-warning" role="status" aria-live="polite" hidden></p>
 
+    <!-- ========== 筛选与搜索 ========== -->
     <section id="filters" class="mb-4">
-      <div class="placeholder-note">占位</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-12 col-lg-3">
+              <span class="text-muted small d-block mb-1" id="building-label">楼栋</span>
+              <div class="btn-group btn-group-sm flex-wrap" id="filter-building" role="group" aria-labelledby="building-label">
+                <button type="button" class="btn btn-outline-primary active" aria-pressed="true" data-value="全部">全部</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="图书馆">图书馆</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="二号教学楼">二号教学楼</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="三号教学楼">三号教学楼</button>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-3">
+              <span class="text-muted small d-block mb-1" id="floor-label">楼层</span>
+              <div class="btn-group btn-group-sm flex-wrap" id="filter-floor" role="group" aria-labelledby="floor-label">
+                <button type="button" class="btn btn-outline-primary active" aria-pressed="true" data-value="全部">全部</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="1F">1F</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="2F">2F</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="3F">3F</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="4F">4F</button>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-3">
+              <span class="text-muted small d-block mb-1" id="status-label">开放状态</span>
+              <div class="btn-group btn-group-sm flex-wrap" id="filter-status" role="group" aria-labelledby="status-label">
+                <button type="button" class="btn btn-outline-primary active" aria-pressed="true" data-value="全部">全部</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="开放中">开放中</button>
+                <button type="button" class="btn btn-outline-primary" aria-pressed="false" data-value="已关闭">已关闭</button>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-3">
+              <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="filter-socket">
+                <label class="form-check-label" for="filter-socket">只看有插座</label>
+              </div>
+              <label class="form-label small text-muted mb-1" for="search-input">搜索名称或楼栋</label>
+              <div class="input-group input-group-sm">
+                <input type="search" class="form-control" id="search-input" placeholder="例如：图书馆 / 考研">
+                <button class="btn btn-outline-secondary" type="button" id="search-clear">清空</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
+    <!-- ========== 自习室列表 ========== -->
     <section id="room-list" class="mb-5">
-      <div class="placeholder-note">占位</div>
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h5 mb-0">自习室列表</h2>
+        <span class="text-muted small" id="room-summary">—</span>
+      </div>
+      <div class="list-group" id="room-items"></div>
     </section>
 
+    <!-- ========== 预约登记 ========== -->
     <section id="booking" class="mb-5">
-      <div class="placeholder-note">占位</div>
+      <h2 class="h5 mb-3">座位预约登记</h2>
+      <p id="booking-status" class="alert alert-warning" role="status" aria-live="polite" hidden></p>
+
+      <form id="booking-form" class="card" novalidate>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="booking-name">姓名 <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="booking-name" name="name" autocomplete="name" placeholder="2—10 个字符">
+              <div class="invalid-feedback" id="error-name"></div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="booking-student-id">学号 <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="booking-student-id" name="studentId" inputmode="numeric" placeholder="8—12 位数字">
+              <div class="invalid-feedback" id="error-studentId"></div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="booking-room">自习室 <span class="text-danger">*</span></label>
+              <select class="form-select" id="booking-room" name="room">
+                <option value="">请选择自习室</option>
+              </select>
+              <div class="invalid-feedback" id="error-room"></div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="booking-date">预约日期 <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" id="booking-date" name="date">
+              <div class="invalid-feedback" id="error-date"></div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="booking-slot">时段 <span class="text-danger">*</span></label>
+              <select class="form-select" id="booking-slot" name="slot">
+                <option value="">请选择时段</option>
+                <option value="08:00—12:00">08:00—12:00</option>
+                <option value="14:00—18:00">14:00—18:00</option>
+                <option value="19:00—22:00">19:00—22:00</option>
+              </select>
+              <div class="invalid-feedback" id="error-slot"></div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="booking-people">人数（1—4） <span class="text-danger">*</span></label>
+              <input type="number" class="form-control" id="booking-people" name="people" min="1" max="4" step="1" value="1">
+              <div class="invalid-feedback" id="error-people"></div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">提交预约</button>
+            <button type="reset" class="btn btn-outline-secondary" id="booking-reset">重置表单</button>
+          </div>
+          <p class="text-muted small mb-0 mt-3">预约记录保存在本机浏览器（localStorage），换浏览器或清理站点数据后会丢失。</p>
+        </div>
+      </form>
     </section>
 
+    <!-- ========== 我的预约 ========== -->
     <section id="my-bookings" class="mb-5">
-      <div class="placeholder-note">占位</div>
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h5 mb-0">我的预约</h2>
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted small" id="booking-count">共 0 条</span>
+          <button type="button" class="btn btn-outline-danger btn-sm" id="clear-bookings">清空记录</button>
+        </div>
+      </div>
+      <div class="list-group" id="booking-items"></div>
     </section>
   </main>
 
@@ -62,5 +180,6 @@
   <script src="libs/bootstrap.bundle.min.js"></script>
   <script src="libs/jquery-3.7.1.min.js"></script>
   <script src="js/common.js"></script>
+  <script src="js/rooms.js"></script>
 </body>
 </html>

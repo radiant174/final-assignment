@@ -50,8 +50,7 @@ const loadBookings = () => {
     roomState.bookings = Array.isArray(parsed) ? parsed : [];
   } catch (error) {
     roomState.bookings = [];
-    console.warn('读取预约记录失败：', error);   // 细节只进控制台，页面上给用户看得懂的话
-    Campus.setStatus(els.bookingStatus, '无法读取预约记录，请检查浏览器是否禁用了网站数据。', 'warning');
+    Campus.setStatus(els.bookingStatus, '无法读取本机预约记录（浏览器可能禁用了本地存储）：' + error.message, 'warning');
   }
 };
 
@@ -60,8 +59,7 @@ const saveBookings = () => {
     localStorage.setItem(BOOKING_KEY, JSON.stringify(roomState.bookings));
     return true;
   } catch (error) {
-    console.warn('保存预约记录失败：', error);
-    Campus.setStatus(els.bookingStatus, '预约保存失败，请检查浏览器是否禁用了网站数据。', 'danger');
+    Campus.setStatus(els.bookingStatus, '预约无法保存到本机（本地存储不可用）：' + error.message, 'danger');
     return false;
   }
 };
@@ -413,7 +411,7 @@ const initRooms = async () => {
     const data = await Campus.fetchJSON('data/rooms.json');
 
     if (!Array.isArray(data.rooms) || data.rooms.length === 0) {
-      Campus.setStatus(els.status, '暂无自习室数据。', 'warning');
+      Campus.setStatus(els.status, '暂无数据：data/rooms.json 中没有自习室记录。', 'warning');
       roomState.data = data;
       renderList();
       return;
@@ -432,10 +430,9 @@ const initRooms = async () => {
 
     renderList();
   } catch (error) {
-    console.warn('自习室数据加载失败：', error);
     Campus.setStatus(
       els.status,
-      '暂时无法获取自习室数据，请稍后重试。',
+      '数据加载失败：' + error.message + '。请确认 data/rooms.json 存在，并用本地服务器打开本页。',
       'danger'
     );
     renderList();

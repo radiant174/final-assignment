@@ -48,6 +48,14 @@ const Campus = {
     return monday.toISOString().slice(0, 10);
   },
 
+  /* 今天的 ISO 日期（本地时区，避免 toISOString 的时差偏移） */
+  todayISO() {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return now.getFullYear() + '-' + month + '-' + day;
+  },
+
   /* 把 ISO 日期（2026-10-06）显示成 2026年10月6日 */
   formatDate(iso) {
     const [year, month, day] = String(iso).split('-');
