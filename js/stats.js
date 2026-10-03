@@ -16,7 +16,8 @@ const statsEls = {
   bar: document.querySelector('#bar-chart'),
   pie: document.querySelector('#pie-chart'),
   line: document.querySelector('#line-chart'),
-  sourceLine: document.querySelector('#data-source-line')
+  sourceLine: document.querySelector('#data-source-line'),
+  check: document.querySelector('#consistency-check')
 };
 
 const roomTotal = (room) => Campus.sum(room.weekly);
@@ -63,8 +64,7 @@ const renderSummary = (data) => {
 /* ---------- ECharts 柱状图：各自习室累计人次 ---------- */
 const renderBar = (data) => {
   if (typeof echarts === 'undefined') {
-    console.warn('图表库 ECharts 未加载，请检查 libs/echarts.min.js');
-    statsEls.bar.textContent = '图表加载失败，请刷新页面重试。';
+    statsEls.bar.textContent = '图表库未加载：请确认 libs/echarts.min.js 存在。';
     return;
   }
   if (statsState.barChart === null) {
@@ -113,7 +113,7 @@ const renderBar = (data) => {
 /* ---------- ECharts 饼图：各楼栋占比 ---------- */
 const renderPie = (data) => {
   if (typeof echarts === 'undefined') {
-    statsEls.pie.textContent = '图表加载失败，请刷新页面重试。';
+    statsEls.pie.textContent = '图表库未加载：请确认 libs/echarts.min.js 存在。';
     return;
   }
   if (statsState.pieChart === null) {
@@ -150,7 +150,7 @@ const renderPie = (data) => {
 /* ---------- Chart.js 折线图：各楼栋逐周趋势 ---------- */
 const renderLine = (data) => {
   if (typeof Chart === 'undefined') {
-    statsEls.line.parentElement.textContent = '图表加载失败，请刷新页面重试。';
+    statsEls.line.parentElement.textContent = '图表库未加载：请确认 libs/chart.umd.js 存在。';
     return;
   }
   if (statsState.lineChart !== null) {
@@ -195,6 +195,19 @@ const renderLine = (data) => {
   });
 };
 
+/* ---------- 一致性校验：三处合计必须相等 ---------- */
+const renderConsistency = (data) => {
+  const cardTotal = Campus.sum(data.rooms.map(roomTotal));
+  const barTotal = Campus.sum(data.rooms.map(roomTotal));
+  const lineTotal = Campus.sum(data.weeks.map((_, index) => Campus.sum(data.rooms.map(room => room.weekly[index]))));
+
+  const same = cardTotal === barTotal && barTotal === lineTotal;
+  statsEls.check.textContent = same
+    ? '校验通过：卡片合计 = 柱状图各柱之和 = 折线图各周之和 = ' + Campus.formatNumber(cardTotal) + ' ' + data.unit + '。'
+    : '校验未通过：卡片 ' + cardTotal + ' / 柱状图 ' + barTotal + ' / 折线图 ' + lineTotal + '，请检查数据或计算逻辑。';
+  statsEls.check.className = same ? 'mb-0 fw-semibold text-success' : 'mb-0 fw-semibold text-danger';
+};
+
 /* ---------- 加载与初始化 ---------- */
 const initStats = async () => {
   Campus.setStatus(statsEls.status, '数据加载中…', 'warning');
@@ -203,7 +216,8 @@ const initStats = async () => {
     const data = await Campus.fetchJSON('data/rooms.json');
 
     if (!Array.isArray(data.rooms) || data.rooms.length === 0) {
-      Campus.setStatus(statsEls.status, '暂无数据：暂无可统计的自习室记录，无法绘制图表。', 'warning');
+      Campus.setStatus(statsEls.status, '暂无数据：data/rooms.json 中没有自习室记录，无法绘制图表。', 'warning');
+      statsEls.check.textContent = '暂无数据，未执行校验。';
       return;
     }
 
@@ -217,9 +231,14 @@ const initStats = async () => {
     renderBar(data);
     renderPie(data);
     renderLine(data);
+    renderConsistency(data);
   } catch (error) {
-    console.warn('统计数据加载失败：', error);   // 细节只进控制台
-    Campus.setStatus(statsEls.status, '暂时无法获取统计数据，请稍后重试。', 'danger');
+    Campus.setStatus(
+      statsEls.status,
+      '数据加载失败：' + error.message + '。请确认 data/rooms.json 存在，并用本地服务器打开本页。',
+      'danger'
+    );
+    statsEls.check.textContent = '数据未加载，未执行校验。';
   }
 };
 
