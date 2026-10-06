@@ -41,21 +41,21 @@
       <div class="row g-3" id="summary-cards"></div>
     </section>
 
-    <!-- ========== 图表区：ECharts 柱状图 + ECharts 饼图 + Chart.js 折线图 ========== -->
+    <!-- ========== 图表区 ========== -->
     <section id="charts" class="mb-5">
       <div class="row g-3">
         <div class="col-12 col-xl-7">
-          <h2 class="h5">各自习室累计使用量（ECharts 柱状图）</h2>
+          <h2 class="h5">各自习室累计使用量</h2>
           <div id="bar-chart" class="chart-box" role="img"
                aria-label="各自习室累计使用量柱状图：横轴为自习室名称，纵轴为累计人次"></div>
         </div>
         <div class="col-12 col-xl-5">
-          <h2 class="h5">各楼栋使用占比（ECharts 饼图）</h2>
+          <h2 class="h5">各楼栋使用占比</h2>
           <div id="pie-chart" class="chart-box" role="img"
                aria-label="各楼栋累计使用人次占比饼图"></div>
         </div>
         <div class="col-12">
-          <h2 class="h5">逐周使用趋势（Chart.js 折线图）</h2>
+          <h2 class="h5">逐周使用趋势</h2>
           <div class="chart-box">
             <canvas id="line-chart" role="img"
                     aria-label="各楼栋逐周使用人次趋势折线图"></canvas>
@@ -64,27 +64,16 @@
       </div>
     </section>
 
-    <!-- ========== 数据说明与一致性校验 ========== -->
-    <section id="data-note" class="mb-5">
-      <h2 class="h5">数据来源与一致性校验</h2>
-      <div class="card">
-        <div class="card-body">
-          <p class="mb-2" id="data-source-line">—</p>
-          <ul class="mb-2 small text-muted">
-            <li>数据文件：<code>data/rooms.json</code>，每间自习室保存第 1—12 周的<b>逐周使用人次</b>数组。</li>
-            <li>卡片与柱状图的"累计人次"都是对该数组<b>求和</b>得到，饼图按楼栋汇总，折线图按周汇总——四个数字出自同一份数据，不应出现互相矛盾。</li>
-            <li>下面一行是页面自动计算的校验结果：卡片合计、柱状图各柱之和、折线图各周之和三者必须相等。</li>
-          </ul>
-          <p class="mb-0 fw-semibold" id="consistency-check">正在校验…</p>
-        </div>
-      </div>
+    <!-- ========== 数据来源 ========== -->
+    <section id="data-source" class="mb-5">
+      <p class="text-muted small mb-0" id="data-source-line">—</p>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
       <p class="mb-1">《软件开发综合实践》期末大作业 · 校园公共信息与数据展示中心</p>
-      <p class="mb-0 small">数据来源：课程教学演示数据（非真实统计） · 运行说明见 README.md</p>
+      <p class="mb-0 small">数据来源：课程教学演示数据（非真实统计）</p>
     </div>
   </footer>
 

@@ -29,7 +29,8 @@ let renderer = null;
 try {
   renderer = new THREE.WebGLRenderer({ antialias: true });
 } catch (error) {
-  Campus.setStatus(statusEl, '当前浏览器无法创建 WebGL 画面，三维场景不可用：' + error.message, 'danger');
+  console.warn('WebGL 初始化失败：', error);
+  Campus.setStatus(statusEl, '当前浏览器无法显示三维画面，请更换新版浏览器再试。', 'danger');
 }
 
 /* ---------- 小工具 ---------- */
@@ -323,7 +324,8 @@ const initScene = async () => {
       }
     }
   } catch (error) {
-    Campus.setStatus(statusEl, '自习室数据加载失败：' + error.message + '。三维场景仍可浏览，但点击楼栋时无法显示使用情况。', 'warning');
+    console.warn('三维页数据加载失败：', error);
+    Campus.setStatus(statusEl, '暂时无法获取自习室数据：三维场景仍可浏览，但点击楼栋时看不到使用情况。', 'warning');
   }
 };
 

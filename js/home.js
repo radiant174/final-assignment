@@ -125,7 +125,7 @@ const loadHome = async () => {
     ]);
 
     if (!Array.isArray(rooms.rooms) || rooms.rooms.length === 0) {
-      Campus.setStatus(pageStatus, '暂无数据：data/rooms.json 中没有自习室记录。', 'warning');
+      Campus.setStatus(pageStatus, '暂无自习室数据。', 'warning');
     } else {
       Campus.clearStatus(pageStatus);
     }
@@ -141,11 +141,8 @@ const loadHome = async () => {
     renderOverview();
     renderNotices();
   } catch (error) {
-    Campus.setStatus(
-      pageStatus,
-      '数据加载失败：' + error.message + '。请确认 data/ 目录下的 JSON 文件存在，并用本地服务器打开本页（直接双击 HTML 会被浏览器的安全策略拦截）。',
-      'danger'
-    );
+    console.warn('首页数据加载失败：', error);   // 技术细节留在控制台，页面只给用户看得懂的提示
+    Campus.setStatus(pageStatus, '暂时无法获取校园信息，请稍后重试。', 'danger');
     renderOverview();
     renderNotices();
   }
